@@ -1,0 +1,22 @@
+# Modelfile pour Clemylia-Melta-LLaMA (82.9M) - Inspiré du format d'inférence Python
+
+# --- 1. Chemin du Fichier GGUF (À adapter) ---
+# Remplacez ceci par le chemin réel de votre fichier GGUF
+FROM hf.co/mradermacher/Qsana-coder-base-GGUF 
+
+# --- 2. Paramètres de Génération pour l'Inférénce ---
+# Ajustements pour la stabilité (légèrement plus bas pour un modèle from scratch)
+PARAMETER temperature 0.7
+PARAMETER top_p 0.9 
+PARAMETER top_k 40 
+PARAMETER num_predict 256
+
+# --- 3. Template de Prompt (CORRECTION CRUCIALE) ---
+# Ceci réplique le format de votre script d'inférence Python.
+# L'entrée de l'utilisateur ({{ .Prompt }}) est insérée là où la question se trouve.
+TEMPLATE """### Instruction {{ .Prompt }} ### Response:\n"""
+
+# --- 4. Configuration du Tokenizer (Arrêt) ---
+# Stoppe la génération dès que le modèle essaie de commencer une nouvelle conversation.
+PARAMETER stop "</s>"
+PARAMETER stop "<|endoftext|>"
